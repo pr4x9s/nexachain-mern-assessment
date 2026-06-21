@@ -1,1 +1,1 @@
-export const DB_NAME: string = 'mernix-db';
+export const DB_NAME: string = 'nexachainai-db';
