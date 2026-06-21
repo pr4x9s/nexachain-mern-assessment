@@ -7,3 +7,16 @@ export interface Config {
     refreshTokenSecret: string;
     refreshTokenExpiry: string;
 }
+
+export interface TokenResponse {
+    accessToken: string;
+    refreshToken: string;
+}
+
+export interface RegisterReqBody {
+    fullName: string;
+    email: string;
+    mobileNumber: string;
+    password: string;
+    referralCodeUsed?: string;
+}
