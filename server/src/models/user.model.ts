@@ -107,10 +107,7 @@ userSchema.methods.isPasswordCorrect = async function (this: IUser, password: st
 userSchema.methods.generateAccessToken = function (this: IUser): string {
     return jwt.sign(
         {
-            _id: this._id,
-            email: this.email,
-            mobileNumber: this.mobileNumber,
-            fullName: this.fullName
+            _id: this._id
         },
         conf.accessTokenSecret as Secret,
         {

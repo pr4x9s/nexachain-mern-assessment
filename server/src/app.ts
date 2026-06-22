@@ -23,4 +23,15 @@ app.use(express.static('public'));
 
 app.use(cookieParser());
 
+
+
+
+import { errorHandler } from './middlewares/error.middleware.ts'
+import userRouter from './routes/user.route.ts'
+
+app.use('/api/v1/users', userRouter);
+
+app.use(errorHandler);
+
+
 export { app }
