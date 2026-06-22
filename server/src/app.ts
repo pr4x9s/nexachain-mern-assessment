@@ -28,8 +28,10 @@ app.use(cookieParser());
 
 import { errorHandler } from './middlewares/error.middleware.ts'
 import userRouter from './routes/user.route.ts'
+import investmentRouter from './routes/investment.route.ts'
 
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/investments', investmentRouter);
 
 app.use(errorHandler);
 
