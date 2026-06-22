@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { User } from '../models/user.model';
-import type { RegisterReqBody, TokenResponse } from '../types/types.ts'
+import type { LoginReqBody, RegisterReqBody, TokenResponse } from '../types/types.ts'
 import { ApiError } from '../utils/ApiError.ts'
 import { asyncHandler } from '../utils/asyncHandler.ts'
 import type mongoose from 'mongoose'
@@ -80,8 +80,6 @@ const registerUser = asyncHandler(async (req: Request<{}, {}, RegisterReqBody>, 
         accountStatus: 'Active'
     });
 
-    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(createUser._id.toString());
-
     const createdUser = await User.findById(createUser?._id).select('-password -refreshToken');
 
     if (!createdUser) {
@@ -91,10 +89,51 @@ const registerUser = asyncHandler(async (req: Request<{}, {}, RegisterReqBody>, 
 
     return res
     .status(201)
+    .json(
+        new ApiResponse(201, { user: createdUser }, 'User registered successfully')
+    );
+});
+
+
+const loginUser = asyncHandler(async (req: Request<{}, {}, LoginReqBody>, res: Response) => {
+    const { email, password } = req.body;
+
+    if ([email, password].some(field => !field || field?.trim() === '')) {
+        throw new ApiError(400, 'All fields are required');
+    }
+
+    const userExists = await User.findOne({
+        $or: [{email: email.toLowerCase().trim()}]
+    });
+
+    if (!userExists) {
+        throw new ApiError(404, 'User does not exist');
+    }
+
+    const isPasswordCorrect = await userExists.isPasswordCorrect(password);
+
+    if (!isPasswordCorrect) {
+        throw new ApiError(400, 'Invalid user credentials');
+    }
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(userExists?._id.toString());
+
+    const loggedInUser = await User.findById(userExists?._id).select('-password -refreshToken');
+
+    return res
+    .status(200)
     .cookie('accessToken', accessToken, accessTokenCookieOptions)
     .cookie('refreshToken', refreshToken, refreshTokenCookieOptions)
     .json(
-        new ApiResponse(201, { user: createdUser }, 'User registered successfully')
+        new ApiResponse(
+            200,
+            {
+                user: loggedInUser,
+                accessToken: accessToken,
+                refreshToken
+            },
+            'User logged in successfully'
+        )
     );
 });
 
@@ -102,4 +141,5 @@ const registerUser = asyncHandler(async (req: Request<{}, {}, RegisterReqBody>, 
 
 export {
     registerUser,
+    loginUser,
 }

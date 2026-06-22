@@ -20,3 +20,5 @@ export interface RegisterReqBody {
     password: string;
     referralCodeUsed?: string;
 }
+
+export interface LoginReqBody extends Pick<RegisterReqBody, 'email' | 'password'> {}
