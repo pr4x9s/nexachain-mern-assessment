@@ -14,3 +14,15 @@ export const createInvestmentSchema = z.object({
 });
 
 export type CreateInvestmentReqBody = z.infer<typeof createInvestmentSchema>;
+
+
+
+export const getUserInvestmentSchema = z.object({
+    investmentStatus: z
+        .enum(['Active', 'Completed', 'Cancelled'], {
+            error: () => ({ message: "Status must be either 'Active', 'Completed' or 'Cancelled'" })
+        })
+        .optional()
+});
+
+export type GetUserInvestmentsQuery = z.infer<typeof getUserInvestmentSchema>;

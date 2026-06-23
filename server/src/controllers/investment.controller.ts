@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express'
 import { asyncHandler } from '../utils/asyncHandler.ts'
-import type { CreateInvestmentReqBody } from '../validators/investment.validator.ts'
+import type { CreateInvestmentReqBody, GetUserInvestmentsQuery } from '../validators/investment.validator.ts'
 import { ApiError } from '../utils/ApiError.ts'
-import { Investment } from '../models/investment.model.ts';
-import { ApiResponse } from '../utils/ApiResponse.ts';
+import { Investment, type IInvestment } from '../models/investment.model.ts'
+import { ApiResponse } from '../utils/ApiResponse.ts'
+import type { QueryFilter } from 'mongoose'
 
 
 
@@ -36,6 +37,33 @@ const createInvestment = asyncHandler(async (req: Request<{}, {}, CreateInvestme
 });
 
 
+const getUserInvestments = asyncHandler(async (req: Request<{}, {}, {}, GetUserInvestmentsQuery>, res: Response) => {
+    const { investmentStatus } = req.query;
+
+    const queryFilter: QueryFilter<IInvestment> = { userReference: req.user?._id }
+
+    if (investmentStatus) {
+        queryFilter.investmentStatus = investmentStatus;
+    }
+
+    const investments = await Investment.find(queryFilter).sort({ createdAt: -1 }).lean();
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            {
+                investments,
+                count: investments.length
+            },
+            'User investments retrieved successfully'
+        )
+    );
+});
+
+
 export {
     createInvestment,
+    getUserInvestments,
 }
