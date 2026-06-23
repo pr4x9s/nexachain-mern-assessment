@@ -1,12 +1,13 @@
 import type { Request, Response } from 'express';
 import { User } from '../models/user.model';
-import type { LoginReqBody, RegisterReqBody, TokenResponse } from '../types/types.ts'
+import type { TokenResponse } from '../types/types.ts'
 import { ApiError } from '../utils/ApiError.ts'
 import { asyncHandler } from '../utils/asyncHandler.ts'
 import type mongoose from 'mongoose'
 import crypto from 'node:crypto'
 import { ApiResponse } from '../utils/ApiResponse.ts'
 import { accessTokenCookieOptions, refreshTokenCookieOptions } from '../constants.ts'
+import type { LoginReqBody, RegisterReqBody } from '../validators/auth.validator.ts'
 
 
 
@@ -40,10 +41,6 @@ const generateAccessAndRefreshTokens = async (userId: string): Promise<TokenResp
 
 const registerUser = asyncHandler(async (req: Request<{}, {}, RegisterReqBody>, res: Response) => {
     const { fullName, email, mobileNumber, password, referralCodeUsed } = req.body;
-
-    if ([fullName, email, mobileNumber, password].some(field => !field || field?.trim() === '')) {
-        throw new ApiError(400, 'All fields are required');
-    }
 
     const existingUser = await User.findOne({
         $or: [{ email }, { mobileNumber }]
@@ -98,12 +95,8 @@ const registerUser = asyncHandler(async (req: Request<{}, {}, RegisterReqBody>, 
 const loginUser = asyncHandler(async (req: Request<{}, {}, LoginReqBody>, res: Response) => {
     const { email, password } = req.body;
 
-    if ([email, password].some(field => !field || field?.trim() === '')) {
-        throw new ApiError(400, 'All fields are required');
-    }
-
     const userExists = await User.findOne({
-        $or: [{email: email.toLowerCase().trim()}]
+        $or: [{ email }]
     });
 
     if (!userExists) {
