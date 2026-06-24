@@ -4,7 +4,9 @@ import { getDirectReferrals, getCompleteReferralTree } from '../controllers/refe
 
 const referralRouter = Router();
 
-referralRouter.route('/direct-refs').get(verifyJWT, getDirectReferrals);
-referralRouter.route('/comp-ref-tree').get(verifyJWT, getCompleteReferralTree);
+referralRouter.use(verifyJWT);
+
+referralRouter.route('/direct-refs').get(getDirectReferrals);
+referralRouter.route('/comp-ref-tree').get(getCompleteReferralTree);
 
 export default referralRouter;
