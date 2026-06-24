@@ -21,7 +21,7 @@ const createInvestment = asyncHandler(async (req: Request<{}, {}, CreateInvestme
         planDetails: planDetails.trim(),
         startDate: investmentStartDate,
         endDate: investmentEndDate,
-        dailyRoiPercentage: 1.0,
+        dailyRoiPercentage: 12.0,
         investmentStatus: 'Active'
     });
 
