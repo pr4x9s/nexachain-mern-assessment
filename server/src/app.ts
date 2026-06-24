@@ -30,10 +30,12 @@ import { errorHandler } from './middlewares/error.middleware.ts'
 import userRouter from './routes/user.route.ts'
 import investmentRouter from './routes/investment.route.ts'
 import adminRouter from './routes/admin.route.ts'
+import dashboardRouter from './routes/dashboard.route.ts'
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/investments', investmentRouter);
 app.use('/api/v1/admin', adminRouter);
+app.use('/api/v1/dashboard', dashboardRouter);
 
 app.use(errorHandler);
 
