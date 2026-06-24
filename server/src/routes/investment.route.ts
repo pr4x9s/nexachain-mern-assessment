@@ -6,7 +6,9 @@ import { createInvestmentSchema, getUserInvestmentSchema } from '../validators/i
 
 const investmentRouter = Router();
 
-investmentRouter.route('/create-investment').post(verifyJWT, validate(createInvestmentSchema), createInvestment);
-investmentRouter.route('/get-my-investments').get(verifyJWT, validate(getUserInvestmentSchema), getUserInvestments);
+investmentRouter.use(verifyJWT);
+
+investmentRouter.route('/create-investment').post(validate(createInvestmentSchema), createInvestment);
+investmentRouter.route('/get-my-investments').get(validate(getUserInvestmentSchema), getUserInvestments);
 
 export default investmentRouter;
