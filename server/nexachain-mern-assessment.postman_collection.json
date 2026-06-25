@@ -1,0 +1,232 @@
+{
+  "info": {
+    "_postman_id": "a4e9a350-b0b7-411a-b5f0-98cb848357ea",
+    "name": "nexachain-mern-assessment",
+    "description": "## MERN Stack Developer Technical Assessment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43177207"
+  },
+  "item": [
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{server}}/users/logout",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "users",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"parent@test.com\",\n    \"password\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{server}}/users/login",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fullName\": \"Great Grand Child User\",\n    \"email\": \"greatgrandchild@test.com\",\n    \"mobileNumber\": \"+919876543214\",\n    \"password\": \"123456\",\n    \"referralCodeUsed\": \"A7F06D96\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{server}}/users/register",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "investments",
+      "item": [
+        {
+          "name": "create-investment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"investmentAmount\": 15000,\n    \"planDetails\": \"This is plan details 2 for grand-child user\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{server}}/investments/create-investment",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "investments",
+                "create-investment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get-investments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{server}}/investments/get-my-investments?investmentStatus=Active",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "investments",
+                "get-my-investments"
+              ],
+              "query": [
+                {
+                  "key": "investmentStatus",
+                  "value": "Active"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "admin",
+      "item": [
+        {
+          "name": "payout-trigger",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{server}}/admin/payout/trigger",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "admin",
+                "payout",
+                "trigger"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "dashboard",
+      "item": [
+        {
+          "name": "stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{server}}/dashboard/stats",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "dashboard",
+                "stats"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "referrals",
+      "item": [
+        {
+          "name": "get-direct-referrals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{server}}/referrals/direct-refs",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "referrals",
+                "direct-refs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get-complete-referral-tree",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{server}}/referrals/comp-ref-tree",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "referrals",
+                "comp-ref-tree"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
