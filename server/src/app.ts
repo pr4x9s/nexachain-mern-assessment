@@ -27,17 +27,34 @@ app.use(cookieParser());
 
 
 import { errorHandler } from './middlewares/error.middleware.ts'
-import userRouter from './routes/user.route.ts'
-import investmentRouter from './routes/investment.route.ts'
-import adminRouter from './routes/admin.route.ts'
-import dashboardRouter from './routes/dashboard.route.ts'
-import referralRouter from './routes/referral.route.ts'
+import { userRouter, investmentRouter, adminRouter, dashboardRouter, referralRouter } from './routes/index.ts'
+import swaggerUi from 'swagger-ui-express'
+import { load } from 'js-yaml'
+import fs from 'node:fs'
+
+let swaggerDocument;
+
+try {
+    swaggerDocument = load(fs.readFileSync('./swaggerOpenapiDocs.yaml', 'utf-8'));
+}
+catch (error) {
+    console.error('Failed to load Swagger Document: ', error);
+}
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/investments', investmentRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/dashboard', dashboardRouter);
 app.use('/api/v1/referrals', referralRouter);
+
+if (swaggerDocument) {
+    app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+        explorer: true
+    }));
+}
+else {
+    console.error('Swagger Document does not exist');
+}
 
 app.use(errorHandler);
 
