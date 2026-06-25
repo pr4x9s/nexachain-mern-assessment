@@ -7,3 +7,8 @@ export interface Config {
     refreshTokenSecret: string;
     refreshTokenExpiry: string;
 }
+
+export interface TokenResponse {
+    accessToken: string;
+    refreshToken: string;
+}

@@ -1,0 +1,181 @@
+openapi: 3.0.0
+info:
+  title: nexachain-mern-assessment
+  version: 1.0.0
+  description: '## MERN Stack Developer Technical Assessment'
+servers:
+  - url: 'http://127.0.0.1:8000/api/v1'
+paths:
+  /users/logout:
+    post:
+      summary: logout
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - users
+  /users/login:
+    post:
+      summary: login
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: color
+            example:
+              email: parent@test.com
+              password: '123456'
+  /users/register:
+    post:
+      summary: register
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                mobileNumber:
+                  type: string
+                  format: utc-millisec
+                password:
+                  type: string
+                  format: color
+                referralCodeUsed:
+                  type: string
+            example:
+              fullName: Great Grand Child User
+              email: greatgrandchild@test.com
+              mobileNumber: '+919876543214'
+              password: '123456'
+              referralCodeUsed: A7F06D96
+  /users/refresh-token:
+    post:
+      summary: refresh-token
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - users
+  /investments/create-investment:
+    post:
+      summary: create-investment
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - investments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                investmentAmount:
+                  type: integer
+                planDetails:
+                  type: string
+            example:
+              investmentAmount: 15000
+              planDetails: This is plan details 2 for grand-child user
+  /investments/get-my-investments:
+    get:
+      summary: get-investments
+      parameters:
+        - name: investmentStatus
+          in: query
+          schema:
+            type: string
+          example: Active
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - investments
+  /admin/payout/trigger:
+    post:
+      summary: payout-trigger
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - admin
+  /dashboard/stats:
+    get:
+      summary: stats
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - dashboard
+  /referrals/direct-refs:
+    get:
+      summary: get-direct-referrals
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - referrals
+  /referrals/comp-ref-tree:
+    get:
+      summary: get-complete-referral-tree
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - referrals
