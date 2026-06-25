@@ -8,6 +8,8 @@ import crypto from 'node:crypto'
 import { ApiResponse } from '../utils/ApiResponse.ts'
 import { accessTokenCookieOptions, refreshTokenCookieOptions } from '../constants.ts'
 import type { LoginReqBody, RegisterReqBody } from '../validators/auth.validator.ts'
+import jwt from 'jsonwebtoken'
+import conf from '../conf/conf.ts';
 
 
 
@@ -151,9 +153,53 @@ const logoutUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
+const refreshTheAccessToken = asyncHandler(async (req: Request, res: Response) => {
+    const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken || req.header('Authorization')?.replace('Bearer ', '').trim();
+
+    if (!incomingRefreshToken) {
+        throw new ApiError(401, 'Unauthorized Request');
+    }
+
+    try {
+        const decodedToken = jwt.verify(incomingRefreshToken, conf.refreshTokenSecret) as jwt.JwtPayload;
+
+        const user = await User.findById(decodedToken?._id);
+
+        if (!user) {
+            throw new ApiError(401, 'Invalid refresh token');
+        }
+
+        if (incomingRefreshToken !== user?.refreshToken) {
+            throw new ApiError(401, 'Refresh token is expired or used');
+        }
+
+        const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshTokens(user?._id.toString());
+
+        return res
+        .status(200)
+        .cookie('accessToken', accessToken, accessTokenCookieOptions)
+        .cookie('refreshToken', newRefreshToken, refreshTokenCookieOptions)
+        .json(
+            new ApiResponse(
+                200,
+                {
+                    accessToken,
+                    refreshToken: newRefreshToken
+                },
+                'Access token refreshed successfully'
+            )
+        );
+    }
+    catch (error: any) {
+        throw new ApiError(401, error?.message || 'Invalid refresh token');
+    }
+});
+
+
 
 export {
     registerUser,
     loginUser,
     logoutUser,
+    refreshTheAccessToken,
 }
