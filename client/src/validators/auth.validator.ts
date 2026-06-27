@@ -9,7 +9,7 @@ export const registerUserSchema = z.object({
         .min(3, 'Full name must be atleast 3 characters long')
         .max(255, 'Full name must not exceed 255 characters'),
     email: z
-        .email({ error: 'Invalid email address format', pattern: z.regexes.rfc5322Email }),
+        .email({ pattern: z.regexes.rfc5322Email }),
     mobileNumber: z
         .e164({ error: 'Mobile number must be in valid E.164 international format (e.g., +919876543210)' }),
     password: z
