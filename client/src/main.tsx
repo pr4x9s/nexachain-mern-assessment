@@ -5,8 +5,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router'
 import AuthLayout from './layouts/AuthLayout.tsx'
 import { Suspense } from 'react'
+import DashboardLayout from './layouts/DashboardLayout.tsx'
 import { AuthProvider } from './providers/AuthProvider.tsx'
-import { Login, Register } from './pages/index.ts'
+import { Home, Investments, Login, Register } from './pages/index.ts'
 
 
 
@@ -51,6 +52,38 @@ const router = createBrowserRouter([
             </Suspense>
           </AuthLayout>
         )
+      },
+
+      // protected routes
+      {
+        path: 'dashboard',
+        element: (
+          <AuthLayout authentication>
+            <DashboardLayout />
+          </AuthLayout>
+        ),
+        children: [
+          {
+            index: true,
+            element: <Navigate to='home' replace />
+          },
+          {
+            path: 'home',
+            element: (
+              <Suspense>
+                <Home />
+              </Suspense>
+            )
+          },
+          {
+            path: 'investments',
+            element: (
+              <Suspense>
+                <Investments />
+              </Suspense>
+            )
+          },
+        ]
       },
     ]
   },
