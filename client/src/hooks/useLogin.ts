@@ -5,11 +5,13 @@ import type { LoginData } from '../validators/auth.validator.ts'
 import { toast } from 'sonner'
 import type { AxiosError } from 'axios'
 import type { ApiErrorResponse } from '../types/types.ts'
+import { useNavigate } from 'react-router'
 
 
 
 export const useLogin = () => {
     const setAuth = useAuthStore(state => state.setAuth);
+    const navigate = useNavigate();
 
     return useMutation({
         mutationFn: (data: LoginData) => authService.login(data),
@@ -17,6 +19,7 @@ export const useLogin = () => {
         onSuccess: (response) => {
             setAuth(response.data.user);
             toast.success(`Welcome back, ${response.data.user.fullName}!`);
+            navigate('/dashboard');
         },
 
         onError: (error: AxiosError<ApiErrorResponse>) => {
