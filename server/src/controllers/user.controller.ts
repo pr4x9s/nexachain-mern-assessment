@@ -175,6 +175,8 @@ const refreshTheAccessToken = asyncHandler(async (req: Request, res: Response) =
 
         const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshTokens(user?._id.toString());
 
+        const loggedInUser = await User.findById(user?._id).select('-password -refreshToken');
+
         return res
         .status(200)
         .cookie('accessToken', accessToken, accessTokenCookieOptions)
@@ -183,6 +185,7 @@ const refreshTheAccessToken = asyncHandler(async (req: Request, res: Response) =
             new ApiResponse(
                 200,
                 {
+                    user: loggedInUser,
                     accessToken,
                     refreshToken: newRefreshToken
                 },

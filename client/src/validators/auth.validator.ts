@@ -9,7 +9,7 @@ export const baseRegisterUserSchema = z.object({
         .min(3, 'Full name must be atleast 3 characters long')
         .max(255, 'Full name must not exceed 255 characters'),
     email: z
-        .email({ error: 'Invalid email address format', pattern: z.regexes.rfc5322Email }),
+        .email({ pattern: z.regexes.rfc5322Email }),
     mobileNumber: z
         .e164({ error: 'Mobile number must be in valid E.164 international format (e.g., +919876543210)' }),
     password: z
@@ -41,7 +41,7 @@ export const registerUserSchema = baseRegisterUserSchema.superRefine(
     }
 );
 
-export type RegisterReqBody = z.infer<typeof registerUserSchema>;
+export type RegisterData = z.infer<typeof registerUserSchema>;
 
 
 export const loginUserSchema = baseRegisterUserSchema.pick({
@@ -49,4 +49,4 @@ export const loginUserSchema = baseRegisterUserSchema.pick({
     password: true
 });
 
-export type LoginReqBody = z.infer<typeof loginUserSchema>;
+export type LoginData = z.infer<typeof loginUserSchema>;
