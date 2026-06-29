@@ -36,3 +36,9 @@ export interface ApiErrorResponse {
     success: boolean;
     errors: ValidationError[];
 }
+
+export interface RefreshTheAccessTokenResBody {
+    user: User
+    accessToken: string;
+    refreshToken: string;
+}

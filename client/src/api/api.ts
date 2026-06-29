@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 import conf from '../conf/conf.ts'
 import { useAuthStore } from '../store/authStore.ts'
-import { authService } from './auth.service.ts'
+import type { ApiResponse, RefreshTheAccessTokenResBody } from '../types/types.ts'
 
 
 
@@ -42,8 +42,7 @@ api.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                // await api.post('/users/refresh-token');
-                await authService.refreshAccessToken();
+                await api.post<Promise<ApiResponse<RefreshTheAccessTokenResBody>>>('/users/refresh-token');
                 return api(originalRequest);
             }
             catch (refreshError) {
