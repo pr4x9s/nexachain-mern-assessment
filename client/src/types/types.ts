@@ -42,3 +42,14 @@ export interface RefreshTheAccessTokenResBody {
     accessToken: string;
     refreshToken: string;
 }
+
+export interface ConfirmationModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+    title: string;
+    description: string;
+    confirmText?: string;
+    cancelText?: string;
+    isPending?: boolean;
+}
