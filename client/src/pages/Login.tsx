@@ -1,16 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLogin } from '../hooks/useLogin.ts'
 import { loginUserSchema, type LoginData } from '../validators/auth.validator.ts'
 import { Link } from 'react-router'
 import { AppWindow, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 
 
 
 const Login = () => {
     const { mutate: loginUser, isPending } = useLogin();
     const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        const pendingLogoutMessage = sessionStorage.getItem('logout_toast_msg');
+        
+        if (pendingLogoutMessage) {
+            toast.success(pendingLogoutMessage);
+            sessionStorage.removeItem('logout_toast_msg');
+        }
+    }, []);
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginData>({
         resolver: zodResolver(loginUserSchema),
