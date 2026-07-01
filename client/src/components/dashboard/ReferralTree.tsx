@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useReferralTree } from '../../hooks/useDashboardData.ts'
 import { formatCurrency } from '../../utils/format.ts'
-import { format } from 'date-fns'
+import { format, formatDistanceToNow } from 'date-fns'
 import { ChevronRight, ChevronDown, User, Network } from 'lucide-react'
 import type { ReferralNode } from '../../types/types.ts'
 
@@ -21,32 +21,47 @@ const TreeNodeItem: React.FC<TreeNodeItemProps> = ({ node, level }) => {
         <div className='ml-4 border-l border-zinc-100 dark:border-zinc-800/60 pl-3 my-1'>
             <div 
                 onClick={() => hasChildren && setIsOpen(!isOpen)}
-                className={`flex items-center justify-between p-3 rounded-xl transition-all duration-150 group ${
+                className={`flex flex-col gap-2 p-3 rounded-xl transition-all duration-150 group border border-transparent sm:gap-3 md:flex-row md:items-center md:justify-between md:gap-0 ${
                     hasChildren ? 'cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900/40' : ''
                 }`}
             >
-                <div className='flex items-center gap-2.5'>
-                    <div className='flex items-center justify-center w-5 h-5'>
+                <div className='flex items-start gap-2.5 sm:items-center'>
+                    <div className='flex items-center justify-center size-5 mt-0.5 sm:mt-0 shrink-0'>
                         {hasChildren ? (
-                            isOpen ? <ChevronDown className='h-4 w-4 text-zinc-400' /> : <ChevronRight className='h-4 w-4 text-zinc-400 group-hover:translate-x-0.5 transition-transform' />
+                            isOpen ? <ChevronDown className='size-4 text-zinc-400' /> : <ChevronRight className='size-4 text-zinc-400 group-hover:translate-x-0.5 transition-transform' />
                         ) : (
-                            <User className='h-3.5 w-3.5 text-zinc-300 dark:text-zinc-600' />
+                            <User className='size-3.5 text-zinc-300 dark:text-zinc-600' />
                         )}
                     </div>
-                    <div>
-                        <p className='text-sm font-semibold text-zinc-800 dark:text-zinc-200'>
+                    <div className='min-w-0'>
+                        <p
+                            className='text-sm font-semibold text-zinc-800 dark:text-zinc-200'
+                            title={node.fullName}
+                        >
                             {node.fullName}
                         </p>
-                        <p className='text-xs text-zinc-400 font-mono'>{node.email}</p>
+                        <a
+                            href={`mailto:${node.email}`}
+                            className='text-xs text-blue-500 dark:text-blue-400 font-mono block'
+                            title={node.email}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {node.email}
+                        </a>
                     </div>
                 </div>
 
-                <div className='text-right'>
+                <div className='text-left pl-7 md:pl-0 md:text-right shrink-0 flex flex-row items-baseline gap-2 justify-between w-full md:w-auto md:flex-col md:gap-0 md:justify-start'>
                     <p className='text-sm font-bold text-zinc-900 dark:text-zinc-100 font-mono'>
                         {formatCurrency(node.walletBalance)}
                     </p>
-                    <p className='text-[10px] text-zinc-400 font-mono'>
-                        Joined {format(new Date(node.createdAt), 'dd MMM yyyy')}
+                    <p className='text-[10px] text-zinc-400 font-mono whitespace-nowrap'>
+                        Joined{' '}
+                        <span
+                            title={`${format(node.createdAt, 'PPPPpppp')} (${formatDistanceToNow(new Date(node.createdAt))})`}
+                        >
+                            {format(node.createdAt, 'PPp')}
+                        </span>
                     </p>
                 </div>
             </div>
