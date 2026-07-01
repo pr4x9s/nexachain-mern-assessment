@@ -1,11 +1,12 @@
-import { Menu, Sun, Moon, LogOut, Settings } from 'lucide-react'
+import { Menu, Sun, Moon, LogOut, Settings, Check, Copy } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore.ts'
 import { useThemeStore } from '../../store/themeStore.ts'
 import { Link } from 'react-router'
-import { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { cn } from '../../utils/cn.ts'
 import ConfirmationModal from '../common/ConfirmationModal.tsx'
 import { useLogout } from '../../hooks/useLogout.ts'
+import { toast } from 'sonner'
 
 
 interface NavbarProps {
@@ -20,6 +21,8 @@ const Navbar = ({ onMenuClick }: NavbarProps) => {
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+	const [copied, setCopied] = useState(false);
+	const [copyError, setCopyError] = useState('');
 
 	const { mutate: performLogout, isPending: isLoggingOut } = useLogout();
 
@@ -41,6 +44,30 @@ const Navbar = ({ onMenuClick }: NavbarProps) => {
 
 	const handleLogoutConfirm = () => {
 		performLogout();
+	};
+
+	const handleCopyReferralCode = async (e: React.MouseEvent) => {
+		e.stopPropagation();
+
+		if (!user?.referralCode) return;
+
+		try {
+			if (navigator.clipboard.writeText) {
+				await navigator.clipboard.writeText(user.referralCode);
+				setCopied(true);
+				toast.success('Referral Code Copied to Clipboard!');
+				setTimeout(() => setCopied(false), 3000);
+			}
+			else {
+				throw new Error('Clipboard API blocked due to insecure context environment');
+			}
+		}
+		catch (error) {
+			console.warn('Copy action failed:', error);
+			toast.error('Copy failed');
+			setCopyError('Copy failed');
+			setTimeout(() => setCopyError(''), 3000);
+		}
 	};
 
 	return (
@@ -111,6 +138,32 @@ const Navbar = ({ onMenuClick }: NavbarProps) => {
 								<p className='text-xs text-zinc-500 dark:text-zinc-400 truncate' title={user?.email}>
 									{user?.email}
 								</p>
+
+								{user?.referralCode && (
+									<div className='flex items-center justify-between p-2 rounded-xl bg-zinc-100/80 dark:bg-zinc-800/60 border-dashed border-zinc-200/40 dark:border-zinc-700/30 transition-colors mt-5'>
+										<div className='flex flex-col text-left'>
+											<span className='text-[10px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500'>
+												My Referral Code
+											</span>
+											<span className={`text-xs font-bold font-mono text-zinc-800 dark:text-zinc-200 tracking-wider ${copied ? 'bg-emerald-300 dark:bg-emerald-600 px-2 rounded text-center' : ''}`}>
+												{user.referralCode}
+											</span>
+										</div>
+										<button
+											onClick={handleCopyReferralCode}
+											disabled={!!copyError}
+											className={cn(
+												'p-1.5 rounded-lg border text-zinc-500 dark:text-zinc-400 transition-all active:scale-90 cursor-pointer',
+												copied
+													? 'bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-950/20 dark:border-emerald-900/30 dark:text-emerald-400'
+													: 'bg-white border-zinc-200 hover:bg-zinc-50 dark:bg-zinc-900 dark:border-zinc-700 dark:hover:bg-zinc-800'
+											)}
+											title={copyError ? 'Copy Blocked': 'Copy Code'}
+										>
+											{copied ? <Check size={13} className='stroke-[2.5]' /> : <Copy size={13} />}
+										</button>
+									</div>
+								)}
 							</div>
 
 							<div className='p-1.5 space-y-0.5'>
