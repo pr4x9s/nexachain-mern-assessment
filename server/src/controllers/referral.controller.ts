@@ -43,7 +43,7 @@ const buildReferralTree = async (parentUserId: mongoose.Types.ObjectId): Promise
 
 
 // fetch direct referrals (1st level downline)
-export const getDirectReferrals = asyncHandler(async (req: Request, res: Response) => {
+const getDirectReferrals = asyncHandler(async (req: Request, res: Response) => {
     const userId = req.user?._id;
 
     if (!userId) {
@@ -64,7 +64,7 @@ export const getDirectReferrals = asyncHandler(async (req: Request, res: Respons
 
 
 // fetch complete recursive referral tree
-export const getCompleteReferralTree = asyncHandler(async (req: Request, res: Response) => {
+const getCompleteReferralTree = asyncHandler(async (req: Request, res: Response) => {
     const userId = req.user?._id;
 
     if (!userId) {
@@ -80,3 +80,10 @@ export const getCompleteReferralTree = asyncHandler(async (req: Request, res: Re
         new ApiResponse(200, referralTree, 'Complete recursive referral tree compiled successfully')
     );
 });
+
+
+
+export {
+    getDirectReferrals,
+    getCompleteReferralTree,
+}
