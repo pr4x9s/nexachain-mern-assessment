@@ -9,9 +9,9 @@ export interface User {
     mobileNumber: string;
     referralCode: string;
     referredBy: string;
-    walletBalance: string;
-    totalRoiEarned: string;
-    totalLevelIncomeEarned: string;
+    walletBalance: number;
+    totalRoiEarned: number;
+    totalLevelIncomeEarned: number;
     accountStatus: 'Active' | 'Suspended' | 'Pending';
     createdAt: string;
     updatedAt: string;
@@ -52,4 +52,14 @@ export interface ConfirmationModalProps {
     confirmText?: string;
     cancelText?: string;
     isPending?: boolean;
+}
+
+export interface DashboardStats extends Pick<User, 'totalRoiEarned' | 'totalLevelIncomeEarned' | 'walletBalance'> {
+    totalInvestments: number;
+}
+
+export type DirectReferralUser = Pick<User, '_id' | 'fullName' | 'email' | 'mobileNumber' | 'accountStatus' | 'walletBalance' | 'createdAt'>;
+
+export interface ReferralNode extends Pick<User, '_id' | 'fullName' | 'email' | 'walletBalance' | 'createdAt'> {
+    children: ReferralNode[];
 }
