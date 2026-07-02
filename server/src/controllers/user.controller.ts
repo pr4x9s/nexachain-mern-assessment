@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { User } from '../models/user.model';
-import type { TokenResponse } from '../types/types.ts'
+import type { AuthUserResponse, ReferredBySummary, TokenResponse } from '../types/types.ts'
 import { ApiError } from '../utils/ApiError.ts'
 import { asyncHandler } from '../utils/asyncHandler.ts'
 import type mongoose from 'mongoose'
@@ -113,7 +113,7 @@ const loginUser = asyncHandler(async (req: Request<{}, {}, LoginReqBody>, res: R
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(userExists?._id.toString());
 
-    const loggedInUser = await User.findById(userExists?._id).select('-password -refreshToken');
+    const loggedInUser = await User.findById(userExists?._id).populate<{ referredBy: ReferredBySummary }>('referredBy', 'fullName email').select('-password -refreshToken');
 
     return res
     .status(200)
@@ -123,7 +123,7 @@ const loginUser = asyncHandler(async (req: Request<{}, {}, LoginReqBody>, res: R
         new ApiResponse(
             200,
             {
-                user: loggedInUser,
+                user: loggedInUser as AuthUserResponse,
                 accessToken: accessToken,
                 refreshToken
             },
@@ -175,7 +175,7 @@ const refreshTheAccessToken = asyncHandler(async (req: Request, res: Response) =
 
         const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshTokens(user?._id.toString());
 
-        const loggedInUser = await User.findById(user?._id).select('-password -refreshToken');
+        const loggedInUser = await User.findById(user?._id).populate<{ referredBy: ReferredBySummary }>('referredBy', 'fullName email').select('-password -refreshToken');
 
         return res
         .status(200)
@@ -185,7 +185,7 @@ const refreshTheAccessToken = asyncHandler(async (req: Request, res: Response) =
             new ApiResponse(
                 200,
                 {
-                    user: loggedInUser,
+                    user: loggedInUser as AuthUserResponse,
                     accessToken,
                     refreshToken: newRefreshToken
                 },
