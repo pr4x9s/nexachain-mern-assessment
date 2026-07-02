@@ -142,10 +142,10 @@ const Navbar = ({ onMenuClick }: NavbarProps) => {
 								{user?.referralCode && (
 									<div className='flex items-center justify-between p-2 rounded-xl bg-zinc-100/80 dark:bg-zinc-800/60 border-dashed border-zinc-200/40 dark:border-zinc-700/30 transition-colors mt-5'>
 										<div className='flex flex-col text-left'>
-											<span className='text-[10px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500'>
+											<span className='text-[10px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1'>
 												My Referral Code
 											</span>
-											<span className={`text-xs font-bold font-mono text-zinc-800 dark:text-zinc-200 tracking-wider ${copied ? 'bg-emerald-300 dark:bg-emerald-600 px-2 rounded text-center' : ''}`}>
+											<span className={`text-center px-3 py-1.5 rounded-xl text-xs bg-blue-500/10 dark:bg-blue-500/5 text-blue-600 dark:text-blue-400 border border-dashed border-blue-500/50 font-bold font-mono tracking-wider ${copied ? 'bg-blue-500/30 dark:bg-blue-500/30' : ''}`}>
 												{user.referralCode}
 											</span>
 										</div>
@@ -155,7 +155,7 @@ const Navbar = ({ onMenuClick }: NavbarProps) => {
 											className={cn(
 												'p-1.5 rounded-lg border text-zinc-500 dark:text-zinc-400 transition-all active:scale-90 cursor-pointer',
 												copied
-													? 'bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-950/20 dark:border-emerald-900/30 dark:text-emerald-400'
+													? 'bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-950/20 dark:border-blue-900/30 dark:text-blue-400'
 													: 'bg-white border-zinc-200 hover:bg-zinc-50 dark:bg-zinc-900 dark:border-zinc-700 dark:hover:bg-zinc-800'
 											)}
 											title={copyError ? 'Copy Blocked': 'Copy Code'}
