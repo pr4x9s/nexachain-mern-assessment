@@ -2,13 +2,19 @@ export interface Config {
     baseUrl: string;
 }
 
+export interface ReferedBySummary {
+    _id: string;
+    fullName: string;
+    email: string;
+}
+
 export interface User {
     _id: string;
     fullName: string;
     email: string;
     mobileNumber: string;
     referralCode: string;
-    referredBy: string;
+    referredBy: ReferedBySummary | null;
     walletBalance: number;
     totalRoiEarned: number;
     totalLevelIncomeEarned: number;
