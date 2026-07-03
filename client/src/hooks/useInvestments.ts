@@ -29,7 +29,7 @@ export const useCreateInvestment = () => {
 
         onSuccess: (response) => {
             const message = response.message || 'Investment activated successfully!';
-            toast(message);
+            toast.success(message);
 
             queryClient.invalidateQueries({ queryKey: ['investments'] });
             queryClient.invalidateQueries({ queryKey: ['dashboard', 'stats'] });
