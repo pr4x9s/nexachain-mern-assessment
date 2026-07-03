@@ -24,7 +24,7 @@ const CreateInvestment = () => {
     const onSubmit = (data: CreateInvestmentData) => {
         createInvestment(data, {
             onSuccess: () => {
-                reset()
+                reset();
                 sessionStorage.clear();
             },
         });
