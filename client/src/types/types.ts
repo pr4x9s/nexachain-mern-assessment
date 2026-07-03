@@ -69,3 +69,21 @@ export type DirectReferralUser = Pick<User, '_id' | 'fullName' | 'email' | 'mobi
 export interface ReferralNode extends Pick<User, '_id' | 'fullName' | 'email' | 'walletBalance' | 'createdAt'> {
     children: ReferralNode[];
 }
+
+export interface Investment {
+    _id: string;
+    userReference: string;
+    investmentAmount: number;
+    planDetails: string;
+    startDate: string;
+    endDate: string;
+    dailyRoiPercentage: number;
+    investmentStatus: 'Active' | 'Completed' | 'Cancelled';
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface GetUserInvestmentsResBody {
+    investments: Investment[];
+    count: number;
+}
