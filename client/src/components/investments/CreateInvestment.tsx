@@ -53,8 +53,8 @@ const CreateInvestment = () => {
                         disabled={isPending}
                         placeholder='e.g. 500'
                         className={`w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:dark:bg-zinc-900 text-sm ${errors.investmentAmount 
-                                ? 'border-red-500/50 focus:ring-red-500 dark:bg-red-950/10' 
-                                : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500'}`}
+                                ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
+                                : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
                         {...register('investmentAmount', { valueAsNumber: true })}
                     />
                     {errors.investmentAmount && (
@@ -79,8 +79,8 @@ const CreateInvestment = () => {
                         placeholder='Specify investment plan targets and strategy allocation rules...'
                         className={`w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm resize-none leading-relaxed disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:dark:bg-zinc-900
                             ${errors.planDetails 
-                                ? 'border-red-500/50 focus:ring-red-500 dark:bg-red-950/10' 
-                                : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500'}`}
+                                ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
+                                : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
                         {...register('planDetails')}
                     />
                     {errors.planDetails && (

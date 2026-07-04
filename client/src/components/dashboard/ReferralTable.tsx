@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
 import { useDirectReferrals } from '../../hooks/useDashboardData.ts'
 import { formatCurrency } from '../../utils/format.ts'
@@ -13,6 +13,7 @@ const columnHelper = createColumnHelper<DirectReferralUser>();
 const ReferralTable = () => {
     const { data: apiResponse, isLoading, isError } = useDirectReferrals();
     const [globalFilter, setGlobalFilter] = useState('');
+    const inputRef = useRef<HTMLInputElement>(null);
 
     // Safely extract the raw referrals array from our envelope response structure
     const referralsData = useMemo(() => apiResponse?.data || [], [apiResponse]);
@@ -142,13 +143,17 @@ const ReferralTable = () => {
                     </h3>
                 </div>
                 <div className='relative max-w-xs w-full'>
-                    <Search className='absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400' />
+                    <Search
+                        className='absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400'
+                        onClick={() => inputRef.current ? inputRef.current.focus() : null}
+                    />
                     <input
                         type='text'
                         value={globalFilter ?? ''}
                         onChange={(e) => setGlobalFilter(e.target.value)}
+                        ref={inputRef}
                         placeholder='Search connections...'
-                        className='w-full pl-9 pr-4 py-2 text-sm bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-zinc-900 dark:text-zinc-100'
+                        className='w-full pl-9 pr-4 py-2 text-sm bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 hover:border-blue-500 text-zinc-900 dark:text-zinc-100 transition-all'
                         title='Search connections...'
                     />
                 </div>
