@@ -7,7 +7,7 @@ import AuthLayout from './components/layouts/AuthLayout.tsx'
 import { Suspense } from 'react'
 import DashboardLayout from './components/layouts/DashboardLayout.tsx'
 import { AuthProvider } from './providers/AuthProvider.tsx'
-import { Home, Investments, Login, Register } from './pages/index.ts'
+import { Home, Investments, Login, ProfitHistory, Register } from './pages/index.ts'
 
 
 
@@ -80,6 +80,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense>
                 <Investments />
+              </Suspense>
+            )
+          },
+          {
+            path: 'profit-history',
+            element: (
+              <Suspense>
+                <ProfitHistory />
               </Suspense>
             )
           },
