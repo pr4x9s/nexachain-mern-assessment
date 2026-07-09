@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
 import { useGetUserInvestments } from '../../hooks/useInvestments.ts'
@@ -18,7 +18,16 @@ const InvestmentList = () => {
 
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [globalFilter, setGlobalFilter] = useState('');
+	const [debouncedFilter, setDebouncedFilter] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			setDebouncedFilter(globalFilter);
+		}, 300);
+
+		return () => clearTimeout(handler);
+	}, [globalFilter]);
 
 	const validStatuses: FilterStatusTabs[] = ['All', 'Active', 'Completed', 'Cancelled'];
 
@@ -179,7 +188,7 @@ const InvestmentList = () => {
 	const table = useReactTable({
 		data: investmentsData,
 		columns,
-		state: { globalFilter },
+		state: { globalFilter: debouncedFilter },
 		onGlobalFilterChange: setGlobalFilter,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),

@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
 import { useDirectReferrals } from '../../hooks/useDashboardData.ts'
 import { formatCurrency } from '../../utils/format.ts'
@@ -13,7 +13,16 @@ const columnHelper = createColumnHelper<DirectReferralUser>();
 const ReferralTable = () => {
     const { data: apiResponse, isLoading, isError } = useDirectReferrals();
     const [globalFilter, setGlobalFilter] = useState('');
+    const [debouncedFilter, setDebouncedFilter] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedFilter(globalFilter);
+        }, 300);
+
+        return () => clearTimeout(handler);
+    }, [globalFilter]);
 
     // Safely extract the raw referrals array from our envelope response structure
     const referralsData = useMemo(() => apiResponse?.data || [], [apiResponse]);
@@ -107,7 +116,7 @@ const ReferralTable = () => {
     const table = useReactTable({
         data: referralsData,
         columns,
-        state: { globalFilter },
+        state: { globalFilter: debouncedFilter },
         onGlobalFilterChange: setGlobalFilter,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
