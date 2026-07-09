@@ -81,7 +81,7 @@ const StatCards = () => {
                             </div>
                         </div>
                         <div className='mt-2'>
-                            <h3 className='text-2xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight font-mono' title={card.value}>
+                            <h3 className='text-2xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight font-mono break-all whitespace-normal leading-relaxed max-w-full' title={card.value}>
                                 {card.value}
                             </h3>
                         </div>
