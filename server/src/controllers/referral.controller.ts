@@ -4,6 +4,7 @@ import { ApiResponse } from '../utils/ApiResponse.ts'
 import { ApiError } from '../utils/ApiError.ts'
 import { User } from '../models/user.model.ts'
 import mongoose from 'mongoose'
+import { ReferralIncome } from '../models/referralIncome.model.ts'
 
 
 
@@ -82,8 +83,29 @@ const getCompleteReferralTree = asyncHandler(async (req: Request, res: Response)
 });
 
 
+const getReferralIncomeHistory = asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.user?._id;
+    
+    if (!userId) {
+        throw new ApiError(401, 'Unauthorized request');
+    }
+
+    const incomeLogs = await ReferralIncome.find({ userWhoEarned: userId })
+    .populate('userWhoGenerated', 'fullName email')
+    .sort({ createdAt: -1 })
+    .lean();
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, incomeLogs, 'Referral level network logs synced successfully')
+    );
+});
+
+
 
 export {
     getDirectReferrals,
     getCompleteReferralTree,
+    getReferralIncomeHistory,
 }

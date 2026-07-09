@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { registerUserSchema, type RegisterData } from '../validators/auth.validator.ts'
 import { Link } from 'react-router'
-import { AppWindow, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { AppWindow, Eye, EyeOff, HeartHandshake, Loader2, Lock, Mail, Phone, User } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRegister } from '../hooks/useRegister.ts'
 
@@ -13,7 +13,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterData>({
+    const { register, handleSubmit, setFocus, formState: { errors } } = useForm<RegisterData>({
         resolver: zodResolver(registerUserSchema),
         mode: 'onTouched'
     });
@@ -49,16 +49,22 @@ const Register = () => {
                             <label htmlFor='fullName' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
                                 Full Name
                             </label>
-                            <input
-                                id='fullName'
-                                type='text'
-                                className={`w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                    ${errors.fullName 
-                                        ? 'border-red-500/50 focus:ring-red-500 dark:bg-red-950/10' 
-                                        : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500'}`}
-                                placeholder='Your Name'
-                                {...register('fullName')}
-                            />
+                            <div className='relative w-full'>
+                                <User 
+                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    onClick={() => setFocus('fullName')}
+                                />
+                                <input
+                                    id='fullName'
+                                    type='text'
+                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
+                                        ${errors.fullName 
+                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
+                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
+                                    placeholder='Your Name'
+                                    {...register('fullName')}
+                                />
+                            </div>
                             {errors.fullName && (
                                 <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
                                     {errors.fullName.message}
@@ -71,16 +77,22 @@ const Register = () => {
                             <label htmlFor='email' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
                                 Email Address
                             </label>
-                            <input
-                                id='email'
-                                type='email'
-                                className={`w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                    ${errors.email 
-                                        ? 'border-red-500/50 focus:ring-red-500 dark:bg-red-950/10' 
-                                        : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500'}`}
-                                placeholder='name@company.com'
-                                {...register('email')}
-                            />
+                            <div className='relative w-full'>
+                                <Mail 
+                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    onClick={() => setFocus('email')}
+                                />
+                                <input
+                                    id='email'
+                                    type='email'
+                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
+                                        ${errors.email 
+                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
+                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
+                                    placeholder='name@company.com'
+                                    {...register('email')}
+                                />
+                            </div>
                             {errors.email && (
                                 <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
                                     {errors.email.message}
@@ -93,16 +105,22 @@ const Register = () => {
                             <label htmlFor='mobileNumber' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
                                 Mobile Number
                             </label>
-                            <input
-                                id='mobileNumber'
-                                type='text'
-                                className={`w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                    ${errors.mobileNumber 
-                                        ? 'border-red-500/50 focus:ring-red-500 dark:bg-red-950/10' 
-                                        : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500'}`}
-                                placeholder='+91XXXXXXXXXX'
-                                {...register('mobileNumber')}
-                            />
+                            <div className='relative w-full'>
+                                <Phone 
+                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    onClick={() => setFocus('mobileNumber')}
+                                />
+                                <input
+                                    id='mobileNumber'
+                                    type='text'
+                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
+                                        ${errors.mobileNumber 
+                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
+                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
+                                    placeholder='+91XXXXXXXXXX'
+                                    {...register('mobileNumber')}
+                                />
+                            </div>
                             {errors.mobileNumber && (
                                 <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
                                     {errors.mobileNumber.message}
@@ -115,16 +133,22 @@ const Register = () => {
                             <label htmlFor='referralCodeUsed' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
                                 Referral Code (Optional)
                             </label>
-                            <input
-                                id='referralCodeUsed'
-                                type='text'
-                                className={`w-full p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                    ${errors.referralCodeUsed 
-                                        ? 'border-red-500/50 focus:ring-red-500 dark:bg-red-950/10' 
-                                        : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500'}`}
-                                placeholder='ABC6YZ'
-                                {...register('referralCodeUsed')}
-                            />
+                            <div className='relative w-full'>
+                                <HeartHandshake 
+                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    onClick={() => setFocus('referralCodeUsed')}
+                                />
+                                <input
+                                    id='referralCodeUsed'
+                                    type='text'
+                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
+                                        ${errors.referralCodeUsed 
+                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
+                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
+                                    placeholder='ABC6YZ'
+                                    {...register('referralCodeUsed')}
+                                />
+                            </div>
                             {errors.referralCodeUsed && (
                                 <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
                                     {errors.referralCodeUsed.message}
@@ -137,14 +161,18 @@ const Register = () => {
                             <label htmlFor='password' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
                                 Password
                             </label>
-                            <div className='relative'>
+                            <div className='relative w-full'>
+                                <Lock 
+                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    onClick={() => setFocus('password')}
+                                />
                                 <input
                                     id='password'
                                     type={showPassword ? 'text' : 'password'}
-                                    className={`w-full p-3 pr-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
+                                    className={`w-full pl-9 py-3 pr-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
                                         ${errors.password 
-                                            ? 'border-red-500/50 focus:ring-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500'}`}
+                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
+                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
                                     placeholder='••••••••'
                                     {...register('password')}
                                 />
@@ -168,14 +196,18 @@ const Register = () => {
                             <label htmlFor='confirmPassword' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
                                 Confirm Password
                             </label>
-                            <div className='relative'>
+                            <div className='relative w-full'>
+                                <Lock 
+                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    onClick={() => setFocus('confirmPassword')}
+                                />
                                 <input
                                     id='confirmPassword'
                                     type={showConfirmPassword ? 'text' : 'password'}
-                                    className={`w-full p-3 pr-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
+                                    className={`w-full pl-9 py-3 pr-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
                                         ${errors.confirmPassword 
-                                            ? 'border-red-500/50 focus:ring-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500'}`}
+                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
+                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
                                     placeholder='••••••••'
                                     {...register('confirmPassword')}
                                 />

@@ -1,6 +1,14 @@
+import type { LucideIcon } from 'lucide-react'
+
 export interface Config {
     baseUrl: string;
 }
+
+export type TabItems<T> = {
+    id: T;
+	name: string;
+	icon: LucideIcon;
+}[];
 
 export interface ReferedBySummary {
     _id: string;
@@ -68,4 +76,44 @@ export type DirectReferralUser = Pick<User, '_id' | 'fullName' | 'email' | 'mobi
 
 export interface ReferralNode extends Pick<User, '_id' | 'fullName' | 'email' | 'walletBalance' | 'createdAt'> {
     children: ReferralNode[];
+}
+
+export interface Investment {
+    _id: string;
+    userReference: string;
+    investmentAmount: number;
+    planDetails: string;
+    startDate: string;
+    endDate: string;
+    dailyRoiPercentage: number;
+    investmentStatus: 'Active' | 'Completed' | 'Cancelled';
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface GetUserInvestmentsResBody {
+    investments: Investment[];
+    count: number;
+}
+
+export interface RoiHistoryItem {
+    _id: string;
+    userReference: string;
+    investmentReference: Pick<Investment, '_id' | 'investmentAmount' | 'planDetails'>;
+    roiAmount: number;
+    status: 'Processed' | 'Failed' | 'Pending';
+    date: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface ReferralIncomeItem {
+    _id: string;
+    userWhoEarned: string;
+    userWhoGenerated: Pick<User, '_id' | 'fullName' | 'email'>;
+    referralLevel: number;
+    incomeAmount: number;
+    date: string;
+    createdAt: string;
+    updatedAt: string;
 }

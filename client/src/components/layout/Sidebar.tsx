@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router'
-import { Home, LineChart, type LucideIcon } from 'lucide-react'
+import { CircleDollarSign, Home, LineChart, type LucideIcon } from 'lucide-react'
 import { cn } from '../../utils/cn.ts'
 
 
@@ -26,6 +26,11 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 			name: 'Investments',
 			icon: LineChart,
 			slug: '/dashboard/investments',
+		},
+		{
+			name: 'Profit History',
+			icon: CircleDollarSign,
+			slug: '/dashboard/profit-history',
 		},
 	];
 
