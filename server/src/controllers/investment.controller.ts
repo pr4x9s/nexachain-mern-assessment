@@ -5,6 +5,7 @@ import { ApiError } from '../utils/ApiError.ts'
 import { Investment, type IInvestment } from '../models/investment.model.ts'
 import { ApiResponse } from '../utils/ApiResponse.ts'
 import type { QueryFilter } from 'mongoose'
+import { RoiHistory } from '../models/roiHistory.model.ts'
 
 
 
@@ -63,7 +64,28 @@ const getUserInvestments = asyncHandler(async (req: Request<{}, {}, {}, GetUserI
 });
 
 
+const getRoiHistory = asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.user?._id;
+
+    if (!userId) {
+        throw new ApiError(401, 'Unauthorized request');
+    }
+
+    const roiLogs = await RoiHistory.find({ userReference: userId })
+    .populate('investmentReference', 'planDetails investmentAmount')
+    .sort({ createdAt: -1 })
+    .lean();
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200, roiLogs, 'Daily ROI ledger streaming logs synced successfully')
+    );
+});
+
+
 export {
     createInvestment,
     getUserInvestments,
+    getRoiHistory,
 }
