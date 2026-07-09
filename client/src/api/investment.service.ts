@@ -1,4 +1,4 @@
-import type { ApiResponse, GetUserInvestmentsResBody, Investment } from '../types/types.ts'
+import type { ApiResponse, GetUserInvestmentsResBody, Investment, RoiHistoryItem } from '../types/types.ts'
 import type { CreateInvestmentData } from '../validators/investment.validator.ts'
 import api from './api.ts'
 
@@ -14,6 +14,11 @@ export const investmentService = {
         const response = await api.get<ApiResponse<GetUserInvestmentsResBody>>('/investments/get-my-investments', {
             params: status ? { investmentStatus: status } : undefined,
         });
+        return response.data;
+    },
+
+    getRoiHistoryLogs: async (): Promise<ApiResponse<RoiHistoryItem[]>> => {
+        const response = await api.get<ApiResponse<RoiHistoryItem[]>>('/investments/get-roi-history');
         return response.data;
     },
 };

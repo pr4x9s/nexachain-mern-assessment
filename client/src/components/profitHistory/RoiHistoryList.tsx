@@ -1,43 +1,40 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
-import { useGetUserInvestments } from '../../hooks/useInvestments.ts'
-import { formatCurrency, formatPercentage } from '../../utils/format.ts'
+import { useGetRoiHistory } from '../../hooks/useInvestments.ts'
+import { formatCurrency } from '../../utils/format.ts'
 import { format, formatDistanceToNow } from 'date-fns'
-import { Search, ChevronLeft, ChevronRight, Layers, Activity, CheckCircle2, XCircle, AlertCircle } from 'lucide-react'
-import type { Investment, TabItems } from '../../types/types.ts'
+import { Search, ChevronLeft, ChevronRight, AlertCircle, Layers, Activity, CheckCircle2, XCircle } from 'lucide-react'
+import type { RoiHistoryItem, TabItems } from '../../types/types.ts'
 
 
+type FilterStatusTabs = RoiHistoryItem['status'] | 'All';
 
-type FilterStatusTabs = Investment['investmentStatus'] | 'All';
-
-const columnHelper = createColumnHelper<Investment>();
+const columnHelper = createColumnHelper<RoiHistoryItem>();
 
 
-const InvestmentList = () => {
+const RoiHistoryList = () => {
 
-	const [searchParams, setSearchParams] = useSearchParams();
 	const [globalFilter, setGlobalFilter] = useState('');
 	const [debouncedFilter, setDebouncedFilter] = useState('');
-    const inputRef = useRef<HTMLInputElement>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+	const inputRef = useRef<HTMLInputElement>(null);
 
-	useEffect(() => {
-		const handler = setTimeout(() => {
-			setDebouncedFilter(globalFilter);
-		}, 300);
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedFilter(globalFilter);
+        }, 300);
 
-		return () => clearTimeout(handler);
-	}, [globalFilter]);
+        return () => clearTimeout(handler);
+    }, [globalFilter]);
 
-	const validStatuses: FilterStatusTabs[] = ['All', 'Active', 'Completed', 'Cancelled'];
-
+	const validStatuses: FilterStatusTabs[] = ['All', 'Processed', 'Pending', 'Failed'];
 	const statusParam = searchParams.get('status') as FilterStatusTabs;
+	const currentStatus = validStatuses.includes(statusParam)? statusParam: 'All';
 
-	const currentStatus = validStatuses.includes(statusParam) ? statusParam : 'All';
+	const { data: apiResponse, isLoading, isError } = useGetRoiHistory();
 
-	const apiStatusParam = currentStatus === 'All' ? undefined : currentStatus;
-
-	const { data: apiResponse, isLoading, isError } = useGetUserInvestments(apiStatusParam);
+	const roiHistoryData = useMemo(() => apiResponse?.data || [], [apiResponse]);
 
 	const handleStatusChange = (statusTabName: FilterStatusTabs) => {
 		setSearchParams((prev) => {
@@ -48,42 +45,41 @@ const InvestmentList = () => {
 
 	const tabItems: TabItems<FilterStatusTabs> = [
 		{
-            id: 'All',
-            name: 'All Contracts',
-            icon: Layers
-        },
+			id: 'All',
+			name: 'All Logs',
+			icon: Layers,
+		},
 		{
-            id: 'Active',
-             name: 'Active',
-              icon: Activity
-        },
+			id: 'Processed',
+			name: 'Processed',
+			icon: CheckCircle2,
+		},
 		{
-            id: 'Completed',
-            name: 'Completed',
-            icon: CheckCircle2
-        },
+			id: 'Pending',
+			name: 'Pending',
+			icon: Activity,
+		},
 		{
-            id: 'Cancelled',
-            name: 'Cancelled',
-            icon: XCircle
-        },
+			id: 'Failed',
+			name: 'Failed',
+			icon: XCircle,
+		},
 	];
 
-	const investmentsData = useMemo(() => apiResponse?.data.investments || [], [apiResponse]);
-
-	const getStatusStyle = (status: Investment['investmentStatus']) => {
+	const getStatusStyle = (status: RoiHistoryItem['status']) => {
 		switch (status) {
-			case 'Active':
+			case 'Processed':
 				return 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400';
-			case 'Completed':
+			case 'Pending':
 				return 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400';
-			case 'Cancelled':
+			case 'Failed':
 				return 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400';
 		}
 	};
 
-	const columns = useMemo(() => [
-			columnHelper.accessor('planDetails', {
+	const columns = useMemo(
+		() => [
+			columnHelper.accessor('investmentReference.planDetails', {
 				header: 'Investment Allocation Details',
 				cell: (info) => (
 					<div className='flex flex-col max-w-xs sm:max-w-sm md:max-w-md'>
@@ -91,79 +87,61 @@ const InvestmentList = () => {
 							className='font-semibold text-zinc-900 dark:text-zinc-100 line-clamp-1 group-hover:line-clamp-none transition-all duration-300 wrap-break-word'
 							title={info.getValue()}
 						>
-							{info.getValue()}
+							{info.getValue() || 'N/A'}
 						</span>
 						<span className='text-[10px] text-zinc-400 mt-1 font-mono'>
-							ID: {info.row.original._id}
+							ID:{' '}
+							{info.row.original.investmentReference?._id ||
+								'N/A'}
 						</span>
 					</div>
 				),
 			}),
-			columnHelper.accessor('investmentAmount', {
+			columnHelper.accessor('investmentReference.investmentAmount', {
 				header: 'Capital Invested',
+				cell: (info) => {
+					const amount = info.getValue();
+					return (
+						<span
+							className='font-bold font-mono text-zinc-900 dark:text-zinc-50'
+							title={amount ? formatCurrency(amount) : '0'}
+						>
+							{amount ? formatCurrency(amount) : '—'}
+						</span>
+					);
+				},
+			}),
+			columnHelper.accessor('roiAmount', {
+				header: 'ROI Received',
 				cell: (info) => (
 					<span
-						className='font-bold font-mono text-zinc-900 dark:text-zinc-50'
+						className='font-bold font-mono text-emerald-600 dark:text-emerald-400'
 						title={formatCurrency(info.getValue())}
 					>
-						{formatCurrency(info.getValue())}
+						+{formatCurrency(info.getValue())}
 					</span>
 				),
 			}),
-			columnHelper.accessor('dailyRoiPercentage', {
-				header: 'Daily ROI %',
+			columnHelper.accessor('createdAt', {
+				header: 'Date Received',
 				cell: (info) => (
-					<span
-						className='font-bold text-emerald-600 dark:text-emerald-400'
-						title={formatPercentage(info.getValue())}
+					<div
+						className='flex flex-col text-xs text-zinc-500 dark:text-zinc-400 font-medium'
+						title={format(new Date(info.getValue()), 'PPPPpppp')}
 					>
-						{formatPercentage(info.getValue())}
-					</span>
+						<span>{format(info.getValue(), 'PP')}</span>
+						<span className='text-[10px] text-zinc-400 font-normal mt-0.5'>
+							(
+							{formatDistanceToNow(new Date(info.getValue()), {
+								addSuffix: true,
+								includeSeconds: true,
+							})}
+							)
+						</span>
+					</div>
 				),
 			}),
-			columnHelper.accessor('startDate', {
-				header: 'Start Date',
-				cell: (info) => {
-					return (
-						<div
-							className='flex flex-col text-xs text-zinc-500 dark:text-zinc-400 font-medium'
-							title={format(info.getValue(), 'PPPPpppp')}
-						>
-							<span>{format(info.getValue(), 'PP')}</span>
-							<span className='text-[10px] text-zinc-400 font-normal mt-0.5'>
-								(
-								{formatDistanceToNow(
-									new Date(info.getValue()),
-									{ addSuffix: true, includeSeconds: true },
-								)}
-								)
-							</span>
-						</div>
-					);
-				},
-			}),
-			columnHelper.accessor('endDate', {
-				header: 'End Date',
-				cell: (info) => {
-					return (
-						<div
-							className='flex flex-col text-xs text-zinc-500 dark:text-zinc-400 font-medium'
-							title={format(info.getValue(), 'PPPPpppp')}
-						>
-							<span>{format(info.getValue(), 'PP')}</span>
-							<span className='text-[10px] text-zinc-400 font-normal mt-0.5'>
-								(
-								{formatDistanceToNow(
-									new Date(info.getValue()),
-									{ addSuffix: true, includeSeconds: true },
-								)}
-								)
-							</span>
-						</div>
-					);
-				},
-			}),
-			columnHelper.accessor('investmentStatus', {
+			columnHelper.accessor('status', {
 				header: 'Status',
 				cell: (info) => {
 					const status = info.getValue();
@@ -173,7 +151,7 @@ const InvestmentList = () => {
 							title={status}
 						>
 							<span
-								className={`size-1.5 rounded-full ${status === 'Active' ? 'bg-emerald-500' : status === 'Completed' ? 'bg-blue-500' : 'bg-red-400'}`}
+								className={`size-1.5 rounded-full ${status === 'Processed' ? 'bg-emerald-500' : status === 'Pending' ? 'bg-blue-500' : 'bg-red-400'}`}
 							/>
 							{status}
 						</span>
@@ -184,12 +162,26 @@ const InvestmentList = () => {
 		[],
 	);
 
+	// Derived filtering state generated directly from url tracking variables
+	const tableFilters = useMemo(() => {
+		const filters = [];
+
+		if (currentStatus !== 'All') {
+			filters.push({ id: 'status', value: currentStatus });
+		}
+
+		return filters;
+	}, [currentStatus]);
+    
 	// eslint-disable-next-line react-hooks/incompatible-library
 	const table = useReactTable({
-		data: investmentsData,
+		data: roiHistoryData,
 		columns,
-		state: { globalFilter: debouncedFilter },
-		onGlobalFilterChange: setGlobalFilter,
+		state: {
+            globalFilter: debouncedFilter,
+			columnFilters: tableFilters,
+		},
+        onGlobalFilterChange: setGlobalFilter,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
@@ -208,14 +200,13 @@ const InvestmentList = () => {
 	if (isError) {
 		return (
 			<div className='p-4 rounded-xl border border-red-200/60 bg-red-50/50 text-red-600 text-sm flex items-center gap-2'>
-				<AlertCircle size={16} /> Investments data stream loading fault.
+				<AlertCircle size={16} /> Runtime ROI distributed ledger data stream loading fault.
 			</div>
 		);
 	}
 
 	return (
 		<div className='space-y-4'>
-			{/* Horizontal Sub-Navigation Tab Bar */}
 			<div className='flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-zinc-100 dark:border-zinc-800/30 pb-2 select-none'>
 				<div className='flex gap-2 overflow-x-auto scrollbar-none'>
 					{tabItems.map((tab) => {
@@ -241,17 +232,17 @@ const InvestmentList = () => {
 
 				<div className='relative max-w-xs w-full ml-auto xl:ml-0'>
 					<Search
-                        className='absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400'
-                        onClick={() => inputRef.current ? inputRef.current.focus() : null}
-                    />
+						className='absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400'
+						onClick={() => inputRef.current ? inputRef.current.focus() : null}
+					/>
 					<input
 						type='text'
 						value={globalFilter ?? ''}
 						onChange={(e) => setGlobalFilter(e.target.value)}
-                        ref={inputRef}
-						placeholder='Search investments...'
+						ref={inputRef}
+						placeholder='Search plans...'
 						className='w-full pl-9 pr-4 py-2 text-sm bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 hover:border-blue-500 text-zinc-900 dark:text-zinc-100 transition-all'
-						title='Search investments...'
+						title='Search plans...'
 					/>
 				</div>
 			</div>
@@ -274,10 +265,10 @@ const InvestmentList = () => {
 											{header.isPlaceholder
 												? null
 												: flexRender(
-														header.column.columnDef
-															.header,
-														header.getContext(),
-													)}
+                                                    header.column.columnDef.header,
+													header.getContext(),
+                                                )
+                                            }
 										</th>
 									))}
 								</tr>
@@ -309,8 +300,7 @@ const InvestmentList = () => {
 										colSpan={columns.length}
 										className='px-6 py-12 text-center text-sm text-zinc-400'
 									>
-										No matching investment pool contract
-										records found.
+										No matching logs found for this status.
 									</td>
 								</tr>
 							)}
@@ -319,7 +309,7 @@ const InvestmentList = () => {
 				</div>
 
 				{/* Grid Pagination Footer Bar */}
-				{investmentsData.length >= 0 && (
+				{roiHistoryData.length >= 0 && (
 					<div className='px-6 py-3 border-t border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between bg-zinc-50/30 dark:bg-zinc-950/10 text-xs text-zinc-500'>
 						<div className='flex items-center gap-1'>
 							<span>Page</span>
@@ -353,4 +343,4 @@ const InvestmentList = () => {
 	)
 }
 
-export default InvestmentList
+export default RoiHistoryList

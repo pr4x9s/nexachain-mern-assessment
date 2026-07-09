@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ApiErrorResponse, ApiResponse, GetUserInvestmentsResBody, Investment } from '../types/types.ts'
-import { investmentService } from '../api/investment.api.ts'
+import type { ApiErrorResponse, ApiResponse, GetUserInvestmentsResBody, Investment, RoiHistoryItem } from '../types/types.ts'
+import { investmentService } from '../api/investment.service.ts'
 import type { AxiosError } from 'axios'
 import type { CreateInvestmentData } from '../validators/investment.validator.ts'
 import { toast } from 'sonner'
@@ -39,5 +39,17 @@ export const useCreateInvestment = () => {
             const message = error.response?.data.message || 'Failed to process investment. Please try again';
             toast.error(message);
         },
+    });
+};
+
+
+export const useGetRoiHistory = () => {
+    return useQuery<ApiResponse<RoiHistoryItem[]>, AxiosError<ApiErrorResponse>>({
+        queryKey: ['investments', 'roi-history'],
+        queryFn: async () => {
+            return await investmentService.getRoiHistoryLogs();
+        },
+        staleTime: 30 * 1000,
+        refetchOnWindowFocus: false,
     });
 };
