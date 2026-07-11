@@ -125,3 +125,139 @@ Private endpoints require a valid authorization bearer token passed in the reque
 1. **Fixed Daily Yields:** Investment contract yields are assigned standard baseline rates when a plan is opened, rather than evaluating live variable index updates.
 2. **Client-Side History Operations:** For early scalability, list history data is streamed fully to the client, allowing TanStack Table to handle sorting, status tabs, and row pagination locally in memory for maximum rendering performance.
 3. **Standalone Data Layer:** The database architecture relies on core MongoDB transaction patterns and model indexes without requiring separate caching systems to simplify local setup and code evaluation.
+
+---
+
+## File/Folder Structure
+
+```tree
+.
+├── client
+│   ├── bun.lock
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── public
+│   │   ├── favicon.svg
+│   │   └── icons.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── api
+│   │   │   ├── api.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── dashboard.service.ts
+│   │   │   └── investment.service.ts
+│   │   ├── App.tsx
+│   │   ├── assets
+│   │   │   ├── hero.png
+│   │   │   ├── react.svg
+│   │   │   └── vite.svg
+│   │   ├── components
+│   │   │   ├── common
+│   │   │   │   └── ConfirmationModal.tsx
+│   │   │   ├── dashboard
+│   │   │   │   ├── AnalyticsChart.tsx
+│   │   │   │   ├── ReferralTable.tsx
+│   │   │   │   ├── ReferralTree.tsx
+│   │   │   │   └── StatCards.tsx
+│   │   │   ├── investments
+│   │   │   │   ├── CreateInvestment.tsx
+│   │   │   │   └── InvestmentList.tsx
+│   │   │   ├── layout
+│   │   │   │   ├── Navbar.tsx
+│   │   │   │   └── Sidebar.tsx
+│   │   │   ├── layouts
+│   │   │   │   ├── AuthLayout.tsx
+│   │   │   │   └── DashboardLayout.tsx
+│   │   │   └── profitHistory
+│   │   │       ├── ReferralIncomeList.tsx
+│   │   │       └── RoiHistoryList.tsx
+│   │   ├── conf
+│   │   │   └── conf.ts
+│   │   ├── hooks
+│   │   │   ├── useDashboardData.ts
+│   │   │   ├── useInvestments.ts
+│   │   │   ├── useLogin.ts
+│   │   │   ├── useLogout.ts
+│   │   │   └── useRegister.ts
+│   │   ├── index.css
+│   │   ├── main.tsx
+│   │   ├── pages
+│   │   │   ├── index.ts
+│   │   │   ├── Login.tsx
+│   │   │   ├── protected
+│   │   │   │   ├── Home.tsx
+│   │   │   │   ├── Investments.tsx
+│   │   │   │   └── ProfitHistory.tsx
+│   │   │   └── Register.tsx
+│   │   ├── providers
+│   │   │   └── AuthProvider.tsx
+│   │   ├── store
+│   │   │   ├── authStore.ts
+│   │   │   └── themeStore.ts
+│   │   ├── types
+│   │   │   └── types.ts
+│   │   ├── utils
+│   │   │   ├── cn.ts
+│   │   │   └── format.ts
+│   │   └── validators
+│   │       ├── auth.validator.ts
+│   │       └── investment.validator.ts
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
+├── README.md
+└── server
+    ├── nexachain-mern-assessment.postman_collection.json
+    ├── package.json
+    ├── pnpm-lock.yaml
+    ├── pnpm-workspace.yaml
+    ├── public
+    ├── README.md
+    ├── src
+    │   ├── app.ts
+    │   ├── conf
+    │   │   └── conf.ts
+    │   ├── constants.ts
+    │   ├── controllers
+    │   │   ├── admin.controller.ts
+    │   │   ├── dashboard.controller.ts
+    │   │   ├── investment.controller.ts
+    │   │   ├── referral.controller.ts
+    │   │   └── user.controller.ts
+    │   ├── db
+    │   │   └── index.ts
+    │   ├── middlewares
+    │   │   ├── auth.middleware.ts
+    │   │   ├── error.middleware.ts
+    │   │   └── validate.middleware.ts
+    │   ├── models
+    │   │   ├── investment.model.ts
+    │   │   ├── referralIncome.model.ts
+    │   │   ├── roiHistory.model.ts
+    │   │   └── user.model.ts
+    │   ├── routes
+    │   │   ├── admin.route.ts
+    │   │   ├── dashboard.route.ts
+    │   │   ├── index.ts
+    │   │   ├── investment.route.ts
+    │   │   ├── referral.route.ts
+    │   │   └── user.route.ts
+    │   ├── server.ts
+    │   ├── services
+    │   │   ├── cron.service.ts
+    │   │   └── payout.service.ts
+    │   ├── types
+    │   │   ├── auth.d.ts
+    │   │   └── types.ts
+    │   ├── utils
+    │   │   ├── ApiError.ts
+    │   │   ├── ApiResponse.ts
+    │   │   └── asyncHandler.ts
+    │   └── validators
+    │       ├── auth.validator.ts
+    │       └── investment.validator.ts
+    ├── swaggerOpenapiDocs.yaml
+    └── tsconfig.json
+```
