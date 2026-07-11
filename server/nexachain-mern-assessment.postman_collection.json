@@ -24,7 +24,8 @@
                 "users",
                 "logout"
               ]
-            }
+            },
+            "description": "Clears secure cookies and destroys the active token session."
           },
           "response": []
         },
@@ -35,7 +36,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"parent@test.com\",\n    \"password\": \"123456\"\n}",
+              "raw": "{\n    \"email\": \"parent@test.com\",\n    \"password\": \"Admin@123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -51,7 +52,8 @@
                 "users",
                 "login"
               ]
-            }
+            },
+            "description": "Verifies credentials, manages session tracking, and returns tokens."
           },
           "response": []
         },
@@ -62,7 +64,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"fullName\": \"Great Grand Child User\",\n    \"email\": \"greatgrandchild@test.com\",\n    \"mobileNumber\": \"+919876543214\",\n    \"password\": \"123456\",\n    \"referralCodeUsed\": \"A7F06D96\"\n}",
+              "raw": "{\n    \"fullName\": \"Parent User\",\n    \"email\": \"parent@test.com\",\n    \"mobileNumber\": \"+919876543210\",\n    \"password\": \"Admin@123\",\n    \"confirmPassword\": \"Admin@123\",\n    \"referralCodeUsed\": \"\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -78,7 +80,8 @@
                 "users",
                 "register"
               ]
-            }
+            },
+            "description": "Registers a new user account and links them to their referrer."
           },
           "response": []
         },
@@ -96,7 +99,8 @@
                 "users",
                 "refresh-token"
               ]
-            }
+            },
+            "description": "Evaluates refresh tokens to issue new short-lived access tokens."
           },
           "response": []
         }
@@ -112,7 +116,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"investmentAmount\": 15000,\n    \"planDetails\": \"This is plan details 2 for grand-child user\"\n}",
+              "raw": "{\n    \"investmentAmount\": 10000,\n    \"planDetails\": \"This is plan details for parent user\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -128,7 +132,8 @@
                 "investments",
                 "create-investment"
               ]
-            }
+            },
+            "description": "Creates a new investment contract plan using available wallet balance."
           },
           "response": []
         },
@@ -152,7 +157,27 @@
                   "value": "Active"
                 }
               ]
-            }
+            },
+            "description": "Fetches all active, completed, or cancelled investment contracts for the user."
+          },
+          "response": []
+        },
+        {
+          "name": "get-roi-history",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{server}}/investments/get-roi-history",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "investments",
+                "get-roi-history"
+              ]
+            },
+            "description": "Fetches the historical log of all daily ROI payouts received by the user."
           },
           "response": []
         }
@@ -176,7 +201,8 @@
                 "payout",
                 "trigger"
               ]
-            }
+            },
+            "description": "Testing Utility Only: Manually triggers the automated daily cron distribution cycle."
           },
           "response": []
         }
@@ -199,7 +225,8 @@
                 "dashboard",
                 "stats"
               ]
-            }
+            },
+            "description": "Returns core KPIs including wallet balance, total investments, and earnings totals."
           },
           "response": []
         }
@@ -222,7 +249,8 @@
                 "referrals",
                 "direct-refs"
               ]
-            }
+            },
+            "description": "Fetches the first-line direct user referrals list with engagement stats."
           },
           "response": []
         },
@@ -240,7 +268,27 @@
                 "referrals",
                 "comp-ref-tree"
               ]
-            }
+            },
+            "description": "Calculates and returns a structured object mapping the multi-level downline tree."
+          },
+          "response": []
+        },
+        {
+          "name": "get-referral-income-history",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{server}}/referrals/get-referral-income-history",
+              "host": [
+                "{{server}}"
+              ],
+              "path": [
+                "referrals",
+                "get-referral-income-history"
+              ]
+            },
+            "description": "Audits chronological log of commissions earned from downline registrations."
           },
           "response": []
         }
