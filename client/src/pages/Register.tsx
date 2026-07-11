@@ -6,6 +6,7 @@ import { AppWindow, Eye, EyeOff, HeartHandshake, Loader2, Lock, Mail, Phone, Use
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRegister } from '../hooks/useRegister.ts'
 import Button from '../components/common/Button.tsx'
+import Input from '../components/common/Input.tsx'
 
 
 
@@ -46,191 +47,126 @@ const Register = () => {
 
                     <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
                         {/* fullName */}
-                        <div>
-                            <label htmlFor='fullName' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
-                                Full Name
-                            </label>
-                            <div className='relative w-full'>
+                        <Input
+                            label='Full Name'
+                            type='text'
+                            placeholder='Your Name'
+                            title='Your Full Name'
+                            leftIcon={
                                 <User 
-                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    className='size-4 cursor-pointer'
                                     onClick={() => setFocus('fullName')}
                                 />
-                                <input
-                                    id='fullName'
-                                    type='text'
-                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                        ${errors.fullName 
-                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
-                                    placeholder='Your Name'
-                                    {...register('fullName')}
-                                />
-                            </div>
-                            {errors.fullName && (
-                                <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
-                                    {errors.fullName.message}
-                                </p>
-                            )}
-                        </div>
+                            }
+                            error={errors.fullName?.message}
+                            {...register('fullName')}
+                        />
                         
                         {/* email */}
-                        <div>
-                            <label htmlFor='email' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
-                                Email Address
-                            </label>
-                            <div className='relative w-full'>
+                        <Input 
+                            label='Email Address'
+                            type='email'
+                            placeholder='name@company.com'
+                            title='Email Address'
+                            leftIcon={
                                 <Mail 
-                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    className='size-4 cursor-pointer'
                                     onClick={() => setFocus('email')}
                                 />
-                                <input
-                                    id='email'
-                                    type='email'
-                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                        ${errors.email 
-                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
-                                    placeholder='name@company.com'
-                                    {...register('email')}
-                                />
-                            </div>
-                            {errors.email && (
-                                <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
-                                    {errors.email.message}
-                                </p>
-                            )}
-                        </div>
+                            }
+                            error={errors.email?.message}
+                            {...register('email')}
+                        />
 
                         {/* mobileNumber */}
-                        <div>
-                            <label htmlFor='mobileNumber' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
-                                Mobile Number
-                            </label>
-                            <div className='relative w-full'>
+                        <Input 
+                            label='Mobile Number'
+                            type='text'
+                            placeholder='+91XXXXXXXXXX'
+                            title='Mobile Number'
+                            leftIcon={
                                 <Phone 
-                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    className='size-4 cursor-pointer'
                                     onClick={() => setFocus('mobileNumber')}
                                 />
-                                <input
-                                    id='mobileNumber'
-                                    type='text'
-                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                        ${errors.mobileNumber 
-                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
-                                    placeholder='+91XXXXXXXXXX'
-                                    {...register('mobileNumber')}
-                                />
-                            </div>
-                            {errors.mobileNumber && (
-                                <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
-                                    {errors.mobileNumber.message}
-                                </p>
-                            )}
-                        </div>
+                            }
+                            error={errors.mobileNumber?.message}
+                            {...register('mobileNumber')}
+                        />
 
                         {/* referralCode */}
-                        <div>
-                            <label htmlFor='referralCodeUsed' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
-                                Referral Code (Optional)
-                            </label>
-                            <div className='relative w-full'>
+                        <Input 
+                            label='Referral Code (Optional)'
+                            type='text'
+                            placeholder='ABC6EXYZ'
+                            title='Referral Code'
+                            leftIcon={
                                 <HeartHandshake 
-                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    className='size-4 cursor-pointer'
                                     onClick={() => setFocus('referralCodeUsed')}
                                 />
-                                <input
-                                    id='referralCodeUsed'
-                                    type='text'
-                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                        ${errors.referralCodeUsed 
-                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
-                                    placeholder='ABC6YZ'
-                                    {...register('referralCodeUsed')}
-                                />
-                            </div>
-                            {errors.referralCodeUsed && (
-                                <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
-                                    {errors.referralCodeUsed.message}
-                                </p>
-                            )}
-                        </div>
+                            }
+                            error={errors.referralCodeUsed?.message}
+                            {...register('referralCodeUsed')}
+                        />
 
                         {/* password */}
-                        <div>
-                            <label htmlFor='password' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
-                                Password
-                            </label>
-                            <div className='relative w-full'>
+                        <Input 
+                            label='Password'
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder='•••••••'
+                            title='Password'
+                            leftIcon={
                                 <Lock 
-                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    className='size-4 cursor-pointer'
                                     onClick={() => setFocus('password')}
                                 />
-                                <input
-                                    id='password'
-                                    type={showPassword ? 'text' : 'password'}
-                                    className={`w-full pl-9 py-3 pr-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                        ${errors.password 
-                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
-                                    placeholder='••••••••'
-                                    {...register('password')}
-                                />
+                            }
+                            rightElement={
                                 <button
                                     type='button'
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className='absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors'
+                                    className='text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors cursor-pointer'
+                                    title={showPassword ? 'Hide' : 'Show'}
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
-                            </div>
-                            {errors.password && (
-                                <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
-                                    {errors.password.message}
-                                </p>
-                            )}
-                        </div>
+                            }
+                            error={errors.password?.message}
+                            {...register('password')}
+                        />
 
                         {/* confirmPassword */}
-                        <div>
-                            <label htmlFor='confirmPassword' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
-                                Confirm Password
-                            </label>
-                            <div className='relative w-full'>
+                        <Input 
+                            label='Confirm Password'
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            placeholder='•••••••'
+                            title='Confirm Password'
+                            leftIcon={
                                 <Lock 
-                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    className='size-4 cursor-pointer'
                                     onClick={() => setFocus('confirmPassword')}
                                 />
-                                <input
-                                    id='confirmPassword'
-                                    type={showConfirmPassword ? 'text' : 'password'}
-                                    className={`w-full pl-9 py-3 pr-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                        ${errors.confirmPassword 
-                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
-                                    placeholder='••••••••'
-                                    {...register('confirmPassword')}
-                                />
+                            }
+                            rightElement={
                                 <button
                                     type='button'
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className='absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors'
+                                    className='text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors cursor-pointer'
+                                    title={showConfirmPassword ? 'Hide' : 'Show'}
                                 >
                                     {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
-                            </div>
-                            {errors.confirmPassword && (
-                                <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
-                                    {errors.confirmPassword.message}
-                                </p>
-                            )}
-                        </div>
+                            }
+                            error={errors.confirmPassword?.message}
+                            {...register('confirmPassword')}
+                        />
 
                         {/* submission */}
                         <Button
                             type='submit'
                             disabled={isPending}
+                            title={isPending ? 'Registering...' : 'Register'}
                         >
                             {isPending ? (
                                 <>
@@ -247,7 +183,7 @@ const Register = () => {
                     <div className='mt-8 pt-5 border-t border-zinc-200 dark:border-zinc-800 text-center'>
                         <p className='text-sm text-zinc-500 dark:text-zinc-400 font-medium'>
                             Already have an account?{' '}
-                            <Link to='/login' className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline transition-colors ml-1'>
+                            <Link to='/login' className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline transition-colors ml-1' title='Sign In'>
                                 Sign In
                             </Link>
                         </p>
@@ -255,7 +191,7 @@ const Register = () => {
                 </div>
             </section>
         </>
-    );
-};
+    )
+}
 
 export default Register

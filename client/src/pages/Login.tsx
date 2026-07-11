@@ -7,6 +7,7 @@ import { AppWindow, Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import Button from '../components/common/Button.tsx'
+import Input from '../components/common/Input.tsx'
 
 
 
@@ -55,77 +56,57 @@ const Login = () => {
 
                     <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
                         {/* email */}
-                        <div>
-                            <label htmlFor='email' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
-                                Email Address
-                            </label>
-                            <div className='relative w-full'>
+                        <Input 
+                            label='Email Address'
+                            type='email'
+                            placeholder='name@company.com'
+                            title='Email Address'
+                            leftIcon={
                                 <Mail 
-                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    className='size-4 cursor-pointer'
                                     onClick={() => setFocus('email')}
                                 />
-                                <input
-                                    id='email'
-                                    type='email'
-                                    className={`w-full pl-9 pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                        ${errors.email 
-                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
-                                    placeholder='name@company.com'
-                                    {...register('email')}
-                                />
-                            </div>
-                            {errors.email && (
-                                <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
-                                    {errors.email.message}
-                                </p>
-                            )}
-                        </div>
+                            }
+                            error={errors.email?.message}
+                            {...register('email')}
+                        />
 
                         {/* password */}
-                        <div>
-                            <label htmlFor='password' className='block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 ml-1'>
-                                Password
-                            </label>
-                            <div className='relative w-full'>
+                        <Input 
+                            label='Password'
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder='•••••••'
+                            title='Password'
+                            leftIcon={
                                 <Lock 
-                                    className='absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400'
+                                    className='size-4 cursor-pointer'
                                     onClick={() => setFocus('password')}
                                 />
-                                <input
-                                    id='password'
-                                    type={showPassword ? 'text' : 'password'}
-                                    className={`w-full pl-9 py-3 pr-11 rounded-xl bg-zinc-50 dark:bg-zinc-950 border outline-none focus:ring-2 transition-all shadow-sm text-sm
-                                        ${errors.password 
-                                            ? 'border-red-500/50 focus:ring-red-500 hover:border-red-500 dark:bg-red-950/10' 
-                                            : 'border-zinc-200 dark:border-zinc-800 focus:ring-blue-500 hover:border-blue-400'}`}
-                                    placeholder='••••••••'
-                                    {...register('password')}
-                                />
+                            }
+                            rightElement={
                                 <button
                                     type='button'
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className='absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors'
+                                    className='text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors cursor-pointer'
+                                    title={showPassword ? 'Hide' : 'Show'}
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
-                            </div>
-                            {errors.password && (
-                                <p className='text-red-500 text-xs font-medium mt-1.5 ml-1'>
-                                    {errors.password.message}
-                                </p>
-                            )}
-                        </div>
+                            }
+                            error={errors.password?.message}
+                            {...register('password')}
+                        />
 
                         {/* submission */}
                         <Button
                             type='submit'
                             disabled={isPending}
+                            title={isPending ? 'Authenticating...' : 'Sign In'}
                         >
                             {isPending ? (
                                 <>
                                     <Loader2 className='animate-spin' size={18} />
-                                    <span>Authenticating</span>
+                                    <span>Authenticating...</span>
                                 </>
                             ) : (
                                 'Sign In'
@@ -142,7 +123,7 @@ const Login = () => {
                         </p> */}
                         <p className='text-sm text-zinc-500 dark:text-zinc-400 font-medium'>
                             Don&apos;t have an account?{' '}
-                            <Link to='/register' className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline transition-colors ml-1'>
+                            <Link to='/register' className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline transition-colors ml-1' title='Register'>
                                 Register
                             </Link>
                         </p>
