@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 import { AppWindow, Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
+import Button from '../components/common/Button.tsx'
 
 
 
@@ -117,29 +118,28 @@ const Login = () => {
                         </div>
 
                         {/* submission */}
-                        <button
+                        <Button
                             type='submit'
                             disabled={isPending}
-                            className='w-full py-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all active:scale-[0.99] disabled:scale-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-blue-500/10 flex items-center justify-center gap-2 cursor-pointer'
                         >
                             {isPending ? (
                                 <>
                                     <Loader2 className='animate-spin' size={18} />
-                                    <span>Authenticating...</span>
+                                    <span>Authenticating</span>
                                 </>
                             ) : (
                                 'Sign In'
                             )}
-                        </button>
+                        </Button>
                     </form>
 
                     {/* footer nav links */}
                     <div className='mt-8 pt-5 border-t border-zinc-200 dark:border-zinc-800 text-center space-y-1'>
-                        <p className='text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 hover:underline transition-colors inline-block borde'>
+                        {/* <p className='text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 hover:underline transition-colors inline-block borde'>
                             <Link to='/forgot-password'>
                                 Forgot Password?
                             </Link>
-                        </p>
+                        </p> */}
                         <p className='text-sm text-zinc-500 dark:text-zinc-400 font-medium'>
                             Don&apos;t have an account?{' '}
                             <Link to='/register' className='text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-semibold hover:underline transition-colors ml-1'>

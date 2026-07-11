@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react'
 import { createInvestmentUserSchema, type CreateInvestmentData } from '../../validators/investment.validator.ts'
 import { useCreateInvestment } from '../../hooks/useInvestments.ts'
 import { formatCurrency } from '../../utils/format.ts'
+import Button from '../common/Button.tsx'
 
 
 
@@ -90,10 +91,9 @@ const CreateInvestment = () => {
                     )}
                 </div>
                 
-                <button
+                <Button
                     type='submit'
                     disabled={isPending}
-                    className='w-full py-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all active:scale-[0.99] disabled:scale-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-blue-500/10 flex items-center justify-center gap-2 cursor-pointer'
                 >
                     {isPending ? (
                         <>
@@ -103,7 +103,7 @@ const CreateInvestment = () => {
                     ) : (
                         'Activate Investment'
                     )}
-                </button>
+                </Button>
             </form>
         </div>
     )

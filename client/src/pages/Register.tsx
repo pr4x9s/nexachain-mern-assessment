@@ -5,6 +5,7 @@ import { Link } from 'react-router'
 import { AppWindow, Eye, EyeOff, HeartHandshake, Loader2, Lock, Mail, Phone, User } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRegister } from '../hooks/useRegister.ts'
+import Button from '../components/common/Button.tsx'
 
 
 
@@ -227,10 +228,9 @@ const Register = () => {
                         </div>
 
                         {/* submission */}
-                        <button
+                        <Button
                             type='submit'
                             disabled={isPending}
-                            className='w-full py-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-blue-500/10 flex items-center justify-center gap-2 cursor-pointer'
                         >
                             {isPending ? (
                                 <>
@@ -240,7 +240,7 @@ const Register = () => {
                             ) : (
                                 'Register'
                             )}
-                        </button>
+                        </Button>
                     </form>
 
                     {/* footer nav links */}
