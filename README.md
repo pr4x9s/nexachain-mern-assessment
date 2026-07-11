@@ -102,7 +102,8 @@ To keep network payloads small and avoid putting unnecessary heavy filtering loa
 ---
 
 ## 📋 Core API Endpoint Documentation
-Private endpoints require a valid authorization bearer token passed in the request header (`Authorization: Bearer <token>`)
+Private endpoints require a valid authorization bearer token passed in the request header (`Authorization: Bearer <token>`).
+_Also available as **Swagger OpenAPI** Docs at `/docs` and **Postman Collection**._
 | Method | Endpoint Route | Security | Description |
 | :--- | :--- | :--- | :--- |
 | **POST** | `/users/register` | Public | Registers a new user account and links them to their referrer. |
