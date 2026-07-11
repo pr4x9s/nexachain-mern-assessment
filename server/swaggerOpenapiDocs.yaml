@@ -6,46 +6,9 @@ info:
 servers:
   - url: 'http://127.0.0.1:8000/api/v1'
 paths:
-  /users/logout:
-    post:
-      summary: logout
-      requestBody:
-        content: {}
-      responses:
-        '200':
-          description: Successfull response
-          content:
-            application/json: {}
-      tags:
-        - users
-  /users/login:
-    post:
-      summary: login
-      responses:
-        '200':
-          description: Successfull response
-          content:
-            application/json: {}
-      tags:
-        - users
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                password:
-                  type: string
-                  format: color
-            example:
-              email: parent@test.com
-              password: '123456'
   /users/register:
     post:
-      summary: register
+      summary: Registers a new user account and links them to their referrer.
       responses:
         '200':
           description: Successfull response
@@ -70,17 +33,58 @@ paths:
                 password:
                   type: string
                   format: color
-                referralCodeUsed:
+                confirmPassword:
+                  type: string
+                  format: color
+                referralCodeUsed(optional):
                   type: string
             example:
-              fullName: Great Grand Child User
-              email: greatgrandchild@test.com
-              mobileNumber: '+919876543214'
-              password: '123456'
-              referralCodeUsed: A7F06D96
+              fullName: Parent User
+              email: parent@test.com
+              mobileNumber: '+919876543210'
+              password: 'Admin@123'
+              confirmPassword: 'Admin@123'
+              referralCodeUsed: XXXXXXXX
+  /users/login:
+    post:
+      summary: Verifies credentials, manages session tracking, and returns tokens.
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: color
+            example:
+              email: parent@test.com
+              password: 'Admin@123'
+  /users/logout:
+    post:
+      summary: Clears secure cookies and destroys the active token session.
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - users
   /users/refresh-token:
     post:
-      summary: refresh-token
+      summary: Evaluates refresh tokens to issue new short-lived access tokens.
       requestBody:
         content: {}
       responses:
@@ -92,7 +96,7 @@ paths:
         - users
   /investments/create-investment:
     post:
-      summary: create-investment
+      summary: Creates a new investment contract plan using available wallet balance.
       responses:
         '200':
           description: Successfull response
@@ -111,11 +115,11 @@ paths:
                 planDetails:
                   type: string
             example:
-              investmentAmount: 15000
-              planDetails: This is plan details 2 for grand-child user
+              investmentAmount: 10000
+              planDetails: This is plan details for parent user
   /investments/get-my-investments:
     get:
-      summary: get-investments
+      summary: Fetches all active, completed, or cancelled investment contracts for the user.
       parameters:
         - name: investmentStatus
           in: query
@@ -131,9 +135,9 @@ paths:
             application/json: {}
       tags:
         - investments
-  /admin/payout/trigger:
-    post:
-      summary: payout-trigger
+  /investments/get-roi-history:
+    get:
+      summary: Fetches the historical log of all daily ROI payouts received by the user.
       requestBody:
         content: {}
       responses:
@@ -142,10 +146,10 @@ paths:
           content:
             application/json: {}
       tags:
-        - admin
+        - investments
   /dashboard/stats:
     get:
-      summary: stats
+      summary: Returns core KPIs including wallet balance, total investments, and earnings totals.
       requestBody:
         content: {}
       responses:
@@ -157,7 +161,7 @@ paths:
         - dashboard
   /referrals/direct-refs:
     get:
-      summary: get-direct-referrals
+      summary: Fetches the first-line direct user referrals list with engagement stats.
       requestBody:
         content: {}
       responses:
@@ -169,7 +173,7 @@ paths:
         - referrals
   /referrals/comp-ref-tree:
     get:
-      summary: get-complete-referral-tree
+      summary: Calculates and returns a structured object mapping the multi-level downline tree.
       requestBody:
         content: {}
       responses:
@@ -179,3 +183,27 @@ paths:
             application/json: {}
       tags:
         - referrals
+  /referrals/get-referral-income-history:
+    get:
+      summary: Audits chronological log of commissions earned from downline registrations.
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - referrals
+  /admin/payout/trigger:
+    post:
+      summary: 'Testing Utility Only: Manually triggers the automated daily cron distribution cycle.'
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json: {}
+      tags:
+        - admin
