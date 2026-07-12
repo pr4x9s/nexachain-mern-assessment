@@ -22,7 +22,7 @@ export const initCronJobs = () => {
             await executeDailyPayoutEngine();
         }
         catch (error) {
-            console.error('first');
+            console.error('[CRON FAILURE] Dynamic ledger payout automation process failed: ', error);
         }
     });
 
