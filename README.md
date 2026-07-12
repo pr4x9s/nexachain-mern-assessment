@@ -119,6 +119,9 @@ _Also available as **Swagger OpenAPI** Docs at `/docs` and **Postman Collection*
 | **GET** | `/referrals/get-referral-income-history` | Protected | Audits chronological log of commissions earned from downline registrations. |
 | **POST** | `/admin/payout/trigger` | Protected (Admin) | *Testing Utility Only:* Manually triggers the automated daily cron distribution cycle. |
 
+### 🧪 Sample Request and Response Data
+[Sample Request and Response Data Here](https://github.com/undefinedx96/nexachain-mern-assessment/tree/main/server#readme)
+
 ---
 
 ## 💡 Development Assumptions Made
